@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+chdir(__DIR__);
+require_once 'vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Twogether\SweetQA\Command as Commands;
+    
+stream_context_set_default([
+    'http' => [
+        'ignore_errors' => true
+    ]
+]);
+
+$application = new Application("Sweet QA", "0.0.1-dev");
+$application->add(new Commands\TestCommand);
+$application->add(new Commands\ExpectationsCommand);
+$application->run();
