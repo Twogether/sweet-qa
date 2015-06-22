@@ -37,7 +37,7 @@ class TestCommand extends Command {
     }
     
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $this->url = $input->getArgument("url");
+        $this->url = $this->normaliseURL($input->getArgument("url"));
         $this->output = $output;
         
         
@@ -73,5 +73,15 @@ class TestCommand extends Command {
         }
         
         return $expectation;
+    }
+    
+    private function normaliseURL($url) {
+        $url = rtrim($url, '/') . '/';
+        
+        if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+            throw new \InvalidArgumentException("The URL $url is not valid. Make sure you copy the full address from your browser.");
+        }
+        
+        return $url;
     }
 }
