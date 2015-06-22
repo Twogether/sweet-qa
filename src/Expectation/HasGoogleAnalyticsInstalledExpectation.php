@@ -29,7 +29,6 @@ class HasGoogleAnalyticsInstalledExpectation extends BaseExpectation {
         
         foreach (ScriptHelper::findScripts($this->url) as $script) {
             preg_match_all("/_gaq\.push\(.*\)/", $script, $matches);
-            
             foreach ($matches[0] as $match) {
                 if (strstr($match, "_setAccount") !== FALSE) {
                     $ga_setAccount++;
@@ -40,15 +39,30 @@ class HasGoogleAnalyticsInstalledExpectation extends BaseExpectation {
                     $ga_other++;
                 }
             }
+            
+            preg_match_all("/ga\(.*\)/", $script, $uamatches);
+            foreach ($uamatches[0] as $match) {
+                if (strstr($match, "'create'") !== FALSE) {
+                    $ga_setAccount++;
+                    $ga_account = substr($match, strpos($match, 'UA-'), 13);
+                } else if (strstr($match, "'pageview'") !== FALSE) {
+                    $ga_trackPageview++;
+                } else {
+                    $ga_other++;
+                }
+            }
         }
         
         switch ($ga_setAccount) {
             case 0:
                 $this->addResult("FAIL", "No Google Analytics installed (No call to _setAccount found)");
-                $this->addResult("INFO", "This expectation only detects the newer 'Universal Analytics' style of Google Analytics tracking code. An older style may be installed and working if this is an older site.");
                 return $this->result;
             case 1:
-                $this->addResult("PASS", "Google Analytics installed with tracking code $ga_account");
+                if (count($matches[0]) > 0) {
+                    $this->addResult("WARN", "Legacy Google Analytics tracking installed with tracking code $ga_account (Consider upgrading to Universal Analytics)");
+                } else {
+                    $this->addResult("PASS", "Google Analytics installed with tracking code $ga_account");
+                }
                 break;
             default:
                 $this->addResult("WARN", "Multiple Google Analytics installations detected");
@@ -63,7 +77,7 @@ class HasGoogleAnalyticsInstalledExpectation extends BaseExpectation {
                 $this->addResult("PASS", "Google Analytics is set up to track page views");
                 break;
             default:
-                $this->addResult("FAIL", "Google Analytics appears to be tracking page views multiple times.");
+                $this->addResult("WARN", "Google Analytics appears to be tracking page views multiple times.");
                 break;
         }
         
