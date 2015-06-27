@@ -44,6 +44,9 @@ class HasBlockedHiddenFilesExpectation extends BaseExpectation {
             "frontend_dev.php",
             "index_dev.html",
             "check.php",
+            "package.json",
+            "gulpfile.js",
+            "Gruntfile.js"
         ];
     }
 }

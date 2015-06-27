@@ -35,7 +35,7 @@ class ExpectationHelper {
     
     public static function initResults() {
         return [
-            "OK" => [],
+            "PASS" => [],
             "INFO" => [],
             "WARN" => [],
             "FAIL" => []
