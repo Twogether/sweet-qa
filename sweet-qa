@@ -1,7 +1,20 @@
 #!/usr/bin/env php
 <?php
-chdir(__DIR__);
-require_once 'vendor/autoload.php';
+if (file_exists('../../autoload.php')) {
+    // In vendor/twogether/sweet-qa.
+    require_once '../../autoload.php';
+    chdir(__DIR__);
+} elseif (file_exists('../vendor/autoload.php')) {
+    // In parent project's bin/.
+    require_once '../vendor/autoload.php';
+    chdir('../vendor/twogether/sweet-qa');
+} elseif (file_exists('vendor/autoload.php')) {
+    // In parent project's root/.
+    require_once 'vendor/autoload.php';
+    chdir('vendor/twogether/sweet-qa');
+} else {
+    throw new \RuntimeException('Could not find the autoloader.');
+}
 
 use Symfony\Component\Console\Application;
 use Twogether\SweetQA\Command as Commands;
