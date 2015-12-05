@@ -1,7 +1,15 @@
 #!/usr/bin/env php
 <?php
 chdir(__DIR__);
-require_once 'vendor/autoload.php';
+if (file_exists('../../autoload.php')) {
+  require_once '../../autoload.php';
+} elseif (file_exists('../vendor/autoload.php')) {
+  require_once '../vendor/autoload.php';
+} elseif (file_exists('vendor/autoload.php')) {
+  require_once 'vendor/autoload.php';
+} else {
+  throw new \RuntimeException('Could not find the autoloader.');
+}
 
 use Symfony\Component\Console\Application;
 use Twogether\SweetQA\Command as Commands;
