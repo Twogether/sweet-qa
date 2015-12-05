@@ -1,7 +1,10 @@
 {
+    "name": "twogether/sweet-qa",
+    "description": "Checks a website for common mistakes",
     "autoload": {
         "psr-4": { "Twogether\\SweetQA\\": "src/" }
     },
+    "bin": ["sweet-qa"],
     "require": {
         "php": ">=5.3.3",
         "symfony/console": "2.*",
