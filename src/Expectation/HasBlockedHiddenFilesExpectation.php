@@ -42,8 +42,12 @@ class HasBlockedHiddenFilesExpectation extends BaseExpectation {
             "LICENSE",
             "app_dev.php",
             "frontend_dev.php",
+            "wp-config.php",
+            "wp-config.php.sample",
             "index_dev.html",
             "check.php",
+            "composer.json",
+            "composer.lock",
             "package.json",
             "gulpfile.js",
             "Gruntfile.js"
